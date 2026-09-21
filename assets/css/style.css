@@ -93,7 +93,18 @@ header, section, footer, #backToTop, #lightbox {
 }
 
 @media (max-width: 700px) {
-  .garland { display: none; }
+  .garland {
+    width: 28px;
+    background-size: 28px 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  .garland {
+    width: 20px;
+    background-size: 20px 38px;
+    opacity: 0.8;
+  }
 }
 
 /* Header */
