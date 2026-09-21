@@ -24,11 +24,29 @@ const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
 const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
 
-function openLightbox(img) {
+let currentGallery = null;
+let currentIndex = -1;
+
+function showInLightbox(img) {
   lightboxImg.src = img.src;
   lightboxImg.alt = img.alt;
   lightboxCaption.textContent = img.alt;
+}
+
+function openLightbox(img, gallery) {
+  if (gallery) {
+    currentGallery = gallery;
+    currentIndex = gallery.indexOf(img);
+    lightbox.classList.add('has-nav');
+  } else {
+    currentGallery = null;
+    currentIndex = -1;
+    lightbox.classList.remove('has-nav');
+  }
+  showInLightbox(img);
   lightbox.classList.add('show');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
@@ -38,16 +56,30 @@ function closeLightbox() {
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
+function stepLightbox(delta) {
+  if (!currentGallery) return;
+  currentIndex = (currentIndex + delta + currentGallery.length) % currentGallery.length;
+  showInLightbox(currentGallery[currentIndex]);
+}
+
+// Only the "Last Year's Golu" gallery gets prev/next navigation in the zoomed view
+const goluGallery = Array.from(document.querySelectorAll('[data-gallery="last-year-golu"] img'));
 
 document.querySelectorAll('.year-card img').forEach(img => {
-  img.addEventListener('click', () => openLightbox(img));
+  const gallery = goluGallery.includes(img) ? goluGallery : null;
+  img.addEventListener('click', () => openLightbox(img, gallery));
 });
 lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', () => stepLightbox(-1));
+lightboxNext.addEventListener('click', () => stepLightbox(1));
 lightbox.addEventListener('click', (e) => {
   if (e.target === lightbox) closeLightbox();
 });
 document.addEventListener('keydown', (e) => {
+  if (!lightbox.classList.contains('show')) return;
   if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') stepLightbox(-1);
+  if (e.key === 'ArrowRight') stepLightbox(1);
 });
 
 // Floating background petals/diyas — skipped entirely if the visitor prefers reduced motion
