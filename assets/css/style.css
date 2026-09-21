@@ -54,6 +54,48 @@ header, section, footer, #backToTop, #lightbox {
   z-index: 1;
 }
 
+/* Hanging garland along the page edges */
+.garland {
+  position: fixed;
+  top: -10px;
+  bottom: 0;
+  width: 48px;
+  background-image: url('../images/garland.svg');
+  background-repeat: repeat-y;
+  background-size: 48px 90px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+  transform-origin: top center;
+  animation: garlandSway 4.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
+}
+.garland-left {
+  left: 0;
+  background-position: top left;
+}
+.garland-right {
+  right: 0;
+  background-position: top right;
+  transform: scaleX(-1);
+  animation-delay: -2.25s;
+}
+@keyframes garlandSway {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+.garland-right {
+  animation-name: garlandSwayRight;
+}
+@keyframes garlandSwayRight {
+  0% { transform: scaleX(-1) rotate(-2deg); }
+  100% { transform: scaleX(-1) rotate(2deg); }
+}
+
+@media (max-width: 700px) {
+  .garland { display: none; }
+}
+
 /* Header */
 header {
   text-align: center;
@@ -309,4 +351,6 @@ footer {
     transition: none;
   }
   .bg-particles { display: none; }
+  .garland { animation: none; transform: none; }
+  .garland-right { transform: scaleX(-1); }
 }
