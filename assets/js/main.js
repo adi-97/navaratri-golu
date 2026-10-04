@@ -82,6 +82,16 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') stepLightbox(1);
 });
 
+// Comic PDF embed — show a "please wait" message until the iframe finishes loading
+const comicFrame = document.getElementById('comicFrame');
+const comicLoading = document.getElementById('comicLoading');
+if (comicFrame && comicLoading) {
+  comicFrame.addEventListener('load', () => {
+    comicFrame.classList.add('loaded');
+    comicLoading.classList.add('hide');
+  });
+}
+
 // Floating background petals/diyas — skipped entirely if the visitor prefers reduced motion
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!prefersReducedMotion) {
