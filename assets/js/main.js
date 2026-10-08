@@ -1,3 +1,22 @@
+// Language toggle — English by default; the visitor's choice is remembered.
+// Text is swapped via CSS on <html lang>; image alts (also used as lightbox captions) are swapped here.
+const langToggle = document.getElementById('langToggle');
+const altImgs = document.querySelectorAll('img[data-alt-ta]');
+altImgs.forEach(img => { img.dataset.altEn = img.alt; });
+
+function setLang(lang) {
+  document.documentElement.lang = lang;
+  altImgs.forEach(img => { img.alt = lang === 'ta' ? img.dataset.altTa : img.dataset.altEn; });
+  try { localStorage.setItem('lang', lang); } catch (e) {}
+}
+
+let savedLang = null;
+try { savedLang = localStorage.getItem('lang'); } catch (e) {}
+if (savedLang === 'ta') setLang('ta');
+langToggle.addEventListener('click', () => {
+  setLang(document.documentElement.lang === 'ta' ? 'en' : 'ta');
+});
+
 // Scroll-reveal animation
 const revealEls = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
