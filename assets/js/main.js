@@ -50,12 +50,22 @@ function openLightbox(img, gallery) {
   lightbox.classList.add('show');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  // Push a history entry so the browser/mobile back button closes the lightbox instead of leaving the page
+  history.pushState({ lightbox: true }, '');
 }
-function closeLightbox() {
+function hideLightbox() {
   lightbox.classList.remove('show');
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
+function closeLightbox() {
+  // Pop the entry pushed in openLightbox; the popstate handler then hides the lightbox
+  if (history.state && history.state.lightbox) history.back();
+  else hideLightbox();
+}
+window.addEventListener('popstate', () => {
+  if (lightbox.classList.contains('show')) hideLightbox();
+});
 function stepLightbox(delta) {
   if (!currentGallery) return;
   currentIndex = (currentIndex + delta + currentGallery.length) % currentGallery.length;
