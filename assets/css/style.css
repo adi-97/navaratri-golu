@@ -113,10 +113,9 @@ html[lang="ta"] .en {
   display: none;
 }
 
-#langToggle {
+.header-btn {
   position: absolute;
   top: 0.75rem;
-  right: 0.75rem;
   padding: 0.35rem 0.9rem;
   border: 1px solid rgba(255,255,255,0.7);
   border-radius: 999px;
@@ -127,16 +126,21 @@ html[lang="ta"] .en {
   cursor: pointer;
   transition: background 0.2s ease;
 }
-#langToggle:hover {
+.header-btn:hover {
   background: rgba(255,255,255,0.3);
 }
+#langToggle { right: 0.75rem; }
+#pdfExport { left: 0.75rem; }
 
 @media (max-width: 700px) {
-  #langToggle { top: 0.5rem; right: 2.25rem; font-size: 0.8rem; }
+  .header-btn { top: 0.5rem; font-size: 0.8rem; }
+  #langToggle { right: 2.25rem; }
+  #pdfExport { left: 2.25rem; }
   header { padding-top: 3rem; }
 }
 @media (max-width: 480px) {
   #langToggle { right: 1.6rem; }
+  #pdfExport { left: 1.6rem; }
 }
 
 /* Header */
@@ -396,4 +400,28 @@ footer {
   .bg-particles { display: none; }
   .garland { animation: none; transform: none; }
   .garland-right { transform: scaleX(-1); }
+}
+
+@media print {
+  @page { margin: 12mm; }
+  body {
+    background: white;
+    animation: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .bg-particles, .garland, .header-btn, #backToTop, #lightbox { display: none !important; }
+  header { padding: 1.5rem 1rem; box-shadow: none; }
+  section { padding: 1rem 0; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .section-heading, .about h2 { break-after: avoid; }
+  .timeline { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .year-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #eee;
+    transform: none !important;
+  }
+  .year-card img { transform: none !important; }
+  .blessing, footer { break-inside: avoid; }
 }
