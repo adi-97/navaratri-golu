@@ -17,6 +17,20 @@ langToggle.addEventListener('click', () => {
   setLang(document.documentElement.lang === 'ta' ? 'en' : 'ta');
 });
 
+const pdfExport = document.getElementById('pdfExport');
+const pageTitle = document.title;
+pdfExport.addEventListener('click', async () => {
+  const imgs = Array.from(document.querySelectorAll('.year-card img'));
+  imgs.forEach(img => { img.loading = 'eager'; });
+  await Promise.all(imgs.filter(img => !img.complete).map(img => new Promise(resolve => {
+    img.addEventListener('load', resolve, { once: true });
+    img.addEventListener('error', resolve, { once: true });
+  })));
+  document.title = pageTitle + (document.documentElement.lang === 'ta' ? ' - Tamil' : ' - English');
+  window.print();
+});
+window.addEventListener('afterprint', () => { document.title = pageTitle; });
+
 // Scroll-reveal animation
 const revealEls = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
